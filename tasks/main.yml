@@ -1,0 +1,17 @@
+# tasks/main.yml
+---
+
+- name: Install kcli repo
+  yum_repository:
+    name: karmab-kcli
+    description: Copr repo for kcli owned by karmab
+    baseurl: https://copr-be.cloud.fedoraproject.org/results/karmab/kcli/fedora-$releasever-$basearch
+    gpgkey: https://copr-be.cloud.fedoraproject.org/results/karmab/kcli/pubkey.gpg
+    gpgcheck: yes
+  when: install_kcli and ansible_os_family == "RedHat" 
+
+- name: Install kcli package
+  yum:
+    name: kcli
+    state: latest
+  when: install_kcli and ansible_os_family == "RedHat" 
