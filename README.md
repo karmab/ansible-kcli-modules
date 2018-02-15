@@ -27,7 +27,7 @@ Once installed, add it to a playbook:
   remote_user: root
   roles:
     - role: karmab.kcli-modules
-      install_python_requirements: no
+      install_kcli: no
     - role: hello-underworld
 ```
 
