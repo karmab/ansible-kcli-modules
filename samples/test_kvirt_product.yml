@@ -1,0 +1,8 @@
+- hosts: localhost
+  tasks:
+    - import_role:
+        name: karmab.kcli-modules
+    - name: Deploy product origin, provided there s a kcli repo providing it
+      kvirt_product: 
+        name: origin
+        product: origin

@@ -1,0 +1,43 @@
+- hosts: localhost
+  tasks:
+    - import_role:
+        name: karmab.kcli-modules
+    - name: Create vm jhendrix from template CentOS-7-x86_64-GenericCloud.qcow2 and forcing memory to be 2G
+      kvirt_vm: 
+        name: jhendrix
+        state: present
+        profile: CentOS-7-x86_64-GenericCloud.qcow2
+        parameters:
+         memory: 2048
+    - name: Get ip from vm jhendrix
+      kvirt_info:
+        name: jhendrix
+      register: result
+      until: result.meta.ip is defined
+      retries: 60
+      delay: 10
+      changed_when: false
+    - debug: var=result.meta.ip
+    - name: Add new instance to host group
+      add_host:
+        name: jhendrix
+        ansible_ssh_host: "{{ result.meta.ip }}"
+        groupname: newvms
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ result.meta.ip }}"
+        port: 22
+        delay: 5
+        timeout: 600
+        state: started
+- name: Validate we are good
+  hosts: newvms
+  vars:
+    user: "centos"
+  user: centos
+  become: True
+  tasks:
+    - name: Create a sample file
+      copy:
+        content: "My ansible modules work\n"
+        dest: /etc/motd

@@ -1,0 +1,9 @@
+- hosts: localhost
+  tasks:
+    - import_role:
+        name: karmab.kcli-modules
+    - name: Get ip from vm tahitibob
+      kvirt_info: 
+        name: tahitibob
+      register: result
+    - debug: var=result.meta.ip

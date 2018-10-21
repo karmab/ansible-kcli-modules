@@ -1,0 +1,13 @@
+- hosts: localhost
+  tasks:
+    - import_role:
+        name: karmab.kcli-modules
+    - name: Create vm tahitibob from template CentOS-7-x86_64-GenericCloud.qcow2 and forcing memory to be 2G
+      kvirt_vm: 
+        name: tahitibob
+        state: present
+        profile: CentOS-7-x86_64-GenericCloud.qcow2
+        parameters:
+         memory: 2048
+      register: result
+    - debug: var=result 

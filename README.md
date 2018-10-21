@@ -49,10 +49,18 @@ For single tasks, you can also use `import_role`
          memory: 2048
 ```
 
-### Module parameters
+### Role parameters
 
 install_kcli
 > Set to true, if you want kcli installed. Defaults to false. Will install via `yum` (only for fedora)
+
+
+### Available modules
+
+- kvirt_vm
+- kvirt_info
+- kvirt_plan
+- kvirt_product
 
 ## License
 

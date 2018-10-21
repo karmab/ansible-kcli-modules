@@ -1,0 +1,10 @@
+- hosts: localhost
+  tasks:
+    - import_role:
+        name: karmab.kcli-modules
+    - name: Launch plan wilibonka from plan file myplan.yml
+      kvirt_plan: 
+        name: wilibonka
+        inputfile: myplan.yml
+      register: result
+    - debug: var=result 
