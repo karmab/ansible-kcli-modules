@@ -27,11 +27,27 @@ Once installed, add it to a playbook:
   remote_user: root
   roles:
     - role: karmab.kcli-modules
-      install_kcli: no
-    - role: hello-underworld
 ```
 
 Because the role is referenced, the `hello-underworld` role is able to make use of the kcli modules
+For single tasks, you can also use `import_role`
+
+
+```
+---
+- hosts: localhost
+  remote_user: root
+  tasks:
+    - import_role:
+        name: karmab.kcli-modules
+    - name: Create a vm
+      kvirt_vm:
+        name: taitibob
+        state: present
+        profile: CentOS-7-x86_64-GenericCloud.qcow2
+        parameters:
+         memory: 2048
+```
 
 ### Module parameters
 
