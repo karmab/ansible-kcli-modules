@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# coding=utf-8
 
 from ansible.module_utils.basic import AnsibleModule
 from kvirt.config import Kconfig
@@ -27,11 +28,13 @@ EXAMPLES = '''
   kvirt_vm:
     name: prout
     state: absent
-  register: result
 '''
 
 
 def main():
+    """
+
+    """
     argument_spec = {
         "state": {
             "default": "present",
@@ -40,6 +43,7 @@ def main():
         },
         "name": {"required": True, "type": "str"},
         "profile": {"required": True, "type": "str"},
+        "parameters": {"required": False, "type": "dict"},
     }
     module = AnsibleModule(argument_spec=argument_spec)
     config = Kconfig(quiet=True)
@@ -54,7 +58,8 @@ def main():
             meta = {'result': 'skipped'}
         else:
             profile = module.params['profile']
-            meta = config.create_vm(name, profile)
+            overrides = module.params['parameters'] if module.params['parameters'] is not None else {}
+            meta = config.create_vm(name, profile, overrides=overrides)
             changed = True
             skipped = False
     else:
@@ -67,6 +72,7 @@ def main():
             skipped = True
             meta = {'result': 'skipped'}
     module.exit_json(changed=changed, skipped=skipped, meta=meta)
+
 
 if __name__ == '__main__':
     main()
