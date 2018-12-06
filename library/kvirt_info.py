@@ -48,7 +48,8 @@ def main():
     exists = k.exists(name)
     fields = module.params['fields']
     if exists:
-        meta = k.info(name, output='yaml', fields=fields, values=True, pretty=False)
+        info = k.info(name)
+        meta = {key: info[key] for key in info if key in fields} if fields else info
         changed = True
         skipped = False
     else:
