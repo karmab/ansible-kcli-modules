@@ -49,7 +49,10 @@ def main():
     fields = module.params['fields']
     if exists:
         info = k.info(name)
-        meta = {key: info[key] for key in info if key in fields} if fields else info
+        if fields:
+            meta = {key: str(info[key]) for key in info if key in fields}
+        else:
+            meta = {key: str(info[key]) for key in info}
         changed = True
         skipped = False
     else:
