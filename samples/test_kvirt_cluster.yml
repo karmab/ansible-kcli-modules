@@ -1,0 +1,14 @@
+- hosts: localhost
+  tasks:
+#  - import_role:
+#        name: karmab.kcli-modules
+  - name: Create a k8s cluster
+    kvirt_cluster:
+      state: absent
+      name: myclu
+      type: kubeadm
+      parameters:
+       masters: 3
+       workers: 2
+    register: result
+  - debug: var=result 
