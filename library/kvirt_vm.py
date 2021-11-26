@@ -11,7 +11,7 @@ short_description: Handles libvirt vms using kcli
 description:
     - Longer description of the module
     - You might include instructions
-version_added: "0.1"
+version_added: "0.2"
 author: "Karim Boumedhel, @karmab"
 notes:
     - Details at https://github.com/karmab/kcli
@@ -19,10 +19,20 @@ requirements:
     - kcli python package you can grab from pypi'''
 
 EXAMPLES = '''
-- name: Create a vm
+- name: Create a vm from profile centos8
   kvirt_vm:
     name: prout
-    profile: centos
+    profile: centos8
+
+- name: Create a vm from image centos8
+  kvirt_vm:
+    name: prout
+    image: centos8
+    parameters:
+     memory: 4096
+     numcpus: 4
+     cmds:
+     - echo Welcome here > /etc/motd
 
 - name: Delete that vm
   kvirt_vm:
@@ -43,7 +53,8 @@ def main():
         },
         "name": {"required": True, "type": "str"},
         "client": {"required": False, "type": "str"},
-        "profile": {"required": True, "type": "str"},
+        "image": {"required": False, "type": "str"},
+        "profile": {"required": False, "type": "str"},
         "parameters": {"required": False, "type": "dict"},
     }
     module = AnsibleModule(argument_spec=argument_spec)
@@ -59,7 +70,14 @@ def main():
             skipped = True
             meta = {'result': 'skipped'}
         else:
+            image = module.params['image']
             profile = module.params['profile']
+            if image is not None:
+                profile = image
+            elif profile is None:
+                # module.fail_json(msg='profile or image needs to be specified', changed=False)
+                profile = 'kvirt'
+                config.profiles[profile] = {}
             overrides = module.params['parameters'] if module.params['parameters'] is not None else {}
             meta = config.create_vm(name, profile, overrides=overrides)
             changed = True

@@ -11,7 +11,7 @@ short_description: Deploy a plan using kcli
 description:
     - Longer description of the module
     - You might include instructions
-version_added: "0.1"
+version_added: "0.2"
 author: "Karim Boumedhel, @karmab"
 notes:
     - Details at https://github.com/karmab/kcli
