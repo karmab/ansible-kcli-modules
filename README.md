@@ -44,7 +44,7 @@ For single tasks, you can also use `import_role`
       kvirt_vm:
         name: taitibob
         state: present
-        profile: CentOS-7-x86_64-GenericCloud.qcow2
+        profile: centos8stream
         parameters:
          memory: 2048
 ```
@@ -69,11 +69,11 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 #### kvirt_vm
 
 ```
-  - name: Create vm tahitibob from centos8 image and forcing memory to be 2G
+  - name: Create vm tahitibob from centos8stream image and forcing memory to be 2G
     kvirt_vm:
       name: tahitibob
       state: present
-      #profile: centos8
+      #profile: centos8stream
       parameters:
        memory: 2048
     register: result

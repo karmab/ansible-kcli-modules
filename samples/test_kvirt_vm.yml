@@ -2,11 +2,11 @@
   tasks:
 #  - import_role:
 #        name: karmab.kcli-modules
-  - name: Create vm tahitibob from centos8 image and forcing memory to be 2G
+  - name: Create vm tahitibob from centos8stream image and forcing memory to be 2G
     kvirt_vm: 
       name: tahitibob
       state: present
-      #profile: centos8
+      #profile: centos8stream
       parameters:
        memory: 2048
     register: result

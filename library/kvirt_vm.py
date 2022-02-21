@@ -19,15 +19,15 @@ requirements:
     - kcli python package you can grab from pypi'''
 
 EXAMPLES = '''
-- name: Create a vm from profile centos8
+- name: Create a vm from profile centos8stream
   kvirt_vm:
     name: prout
-    profile: centos8
+    profile: centos8stream
 
-- name: Create a vm from image centos8
+- name: Create a vm from image centos8stream
   kvirt_vm:
     name: prout
-    image: centos8
+    image: centos8stream
     parameters:
      memory: 4096
      numcpus: 4
