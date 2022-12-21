@@ -16,7 +16,7 @@ The modules are found in the [library folder](./library)
 Use the Galaxy client to install the role:
 
 ```
-$ ansible-galaxy install karmabs.kcli-modules
+$ ansible-galaxy install karmab.kcli-modules
 ```
 
 Once installed, add it to a playbook:
