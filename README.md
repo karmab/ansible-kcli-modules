@@ -149,7 +149,7 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
     name: myclu
     type: kubeadm
     parameters:
-     masters: 3
+     ctlplanes: 3
      workers: 2
   register: result
 - debug: var=result

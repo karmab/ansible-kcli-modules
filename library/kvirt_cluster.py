@@ -24,7 +24,7 @@ EXAMPLES = '''
     name: myclu
     type: kubeadm
     parameyters:
-     masters: 3
+     ctlplanes: 3
      workers: 2
 
 - name: Delete that cluster

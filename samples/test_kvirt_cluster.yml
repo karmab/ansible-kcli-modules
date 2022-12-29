@@ -8,7 +8,7 @@
       name: myclu
       type: kubeadm
       parameters:
-       masters: 3
+       ctlplanes: 3
        workers: 2
     register: result
   - debug: var=result 

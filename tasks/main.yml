@@ -3,4 +3,4 @@
 
 - name: Install kcli 
   ansible.builtin.shell: |
-    curl https://raw.githubusercontent.com/karmab/kcli/master/install.sh | bash
+    curl https://raw.githubusercontent.com/karmab/kcli/main/install.sh | bash
