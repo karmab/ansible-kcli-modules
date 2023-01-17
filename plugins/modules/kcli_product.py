@@ -6,7 +6,7 @@ from kvirt.config import Kconfig
 
 
 DOCUMENTATION = '''
-module: kvirt_product
+module: kcli_product
 short_description: Deploy a product using kcli
 description:
     - Longer description of the module
@@ -20,17 +20,17 @@ requirements:
 
 EXAMPLES = '''
 - name: Deploy origin
-  kvirt_product:
+  kcli_product:
     name: my_origin
     product: origin
 
 - name: Delete that product
-  kvirt_product:
+  kcli_product:
     name: my_origin
     state: absent
 
 - name: Deploy fission with additional parameters
-  kvirt_product:
+  kcli_product:
     name: fission
     product: fission
     parameters:

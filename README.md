@@ -8,69 +8,41 @@ The modules are found in the [library folder](./library)
 
 ## Requirements
 
-- Ansible
+- Ansible >= 2.9, it is recommended to download the latest version of [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 - [kcli](https://github.com/karmab/kcli)
 
-## Installation and use
+## Installation
 
-Use the Galaxy client to install the role:
-
-```
-$ ansible-galaxy install karmab.kcli-modules
-```
-
-Once installed, add it to a playbook:
+Use the Ansible Galaxy client to install the latest version of the collection:
 
 ```
----
-- hosts: localhost
-  remote_user: root
-  roles:
-    - role: karmab.kcli-modules
+$ ansible-galaxy collection install karmab.kcli
 ```
 
-Because the role is referenced, the `hello-underworld` role is able to make use of the kcli modules
-For single tasks, you can also use `import_role`
+or using `requirements.yml`:
 
-
-```
----
-- hosts: localhost
-  remote_user: root
-  tasks:
-    - import_role:
-        name: karmab.kcli-modules
-    - name: Create a vm
-      kvirt_vm:
-        name: taitibob
-        state: present
-        profile: centos8stream
-        parameters:
-         memory: 2048
+```yaml
+collections:
+  - name: karmab.kcli
 ```
 
-### Role parameters
-
-install_kcli
-> Set to true, if you want kcli installed. Defaults to false
-
-### How to use 
+## How to use
 
 The following modules are available
 
-- kvirt_vm
-- kvirt_info
-- kvirt_plan
-- kvirt_product
-- kvirt_cluster
+- kcli_vm
+- kcli_info
+- kcli_plan
+- kcli_product
+- kcli_cluster
 
 For all of them, apart from mandatory parameters, you can provide a parameters dict with all your parameters
 
-#### kvirt_vm
+#### kcli_vm
 
-```
+```yaml
   - name: Create vm tahitibob from centos8stream image and forcing memory to be 2G
-    kvirt_vm:
+    karmab.kcli_vm:
       name: tahitibob
       state: present
       #profile: centos8stream
@@ -88,11 +60,11 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 |profile     |false    |                      |
 |parameters  |false    |Empty dict            |
 
-#### kvirt_info
+#### kcli_info
 
-```
+```yaml
 - name: Get ip from vm tahitibob
-  kvirt_info:
+  karmab.kcli_info:
     name: tahitibob
   register: result
 - debug: var=result.meta.ip
@@ -105,11 +77,11 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 |fields      |false    |Empty list            |
 |parameters  |false    |Empty dict            |
 
-#### kvirt_plan
+#### kcli_plan
 
-```
+```yaml
 - name: Launch plan wilibonka from plan file myplan.yml
-  kvirt_plan:
+  karmab.kcli_plan:
     name: wilibonka
     inputfile: myplan.yml
   register: result
@@ -123,11 +95,11 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 |inputfile   |false    |                      |
 |parameters  |false    |Empty dict            |
 
-#### kvirt_product
+#### kcli_product
 
-```
+```yaml
 - name: Deploy product origin, provided there is a kcli repo providing it
-  kvirt_product:
+  karmab.kcli_product:
     name: microshift
     product: microshift
 ```
@@ -140,11 +112,11 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 |repo        |false    |                      |
 |parameters  |false    |Empty dict            |
 
-#### kvirt_cluster
+#### kcli_cluster
 
-```
+```yaml
 - name: Create a k8s cluster
-  kvirt_cluster:
+  karmab.kcli_cluster:
     state: absent
     name: myclu
     type: kubeadm

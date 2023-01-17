@@ -6,7 +6,7 @@ from kvirt.config import Kconfig
 
 
 DOCUMENTATION = '''
-module: kvirt_info
+module: kcli_info
 short_description: Retrieves info using kcli library
 description:
     - Longer description of the module
@@ -20,11 +20,11 @@ requirements:
 
 EXAMPLES = '''
 - name: Get Complete Info
-  kvirt_info:
+  kcli_info:
     name: prout
 
 - name: Only get ip
-  kvirt_info:
+  kcli_info:
     name: prout
     fields:
     - ip

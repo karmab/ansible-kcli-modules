@@ -6,7 +6,7 @@ from kvirt.config import Kconfig
 
 
 DOCUMENTATION = '''
-module: kvirt_plan
+module: kcli_plan
 short_description: Deploy a plan using kcli
 description:
     - Longer description of the module
@@ -20,12 +20,12 @@ requirements:
 
 EXAMPLES = '''
 - name: Deploy origin
-  kvirt_plan:
+  kcli_plan:
     name: my_plan
     inputfile: my_plan.yml
 
 - name: Delete that plan
-  kvirt_plan:
+  kcli_plan:
     name: my_plan
     state: absent
 

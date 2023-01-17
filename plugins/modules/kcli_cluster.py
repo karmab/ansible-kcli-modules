@@ -6,8 +6,8 @@ from kvirt.config import Kconfig
 
 
 DOCUMENTATION = '''
-module: kvirt_vm
-short_description: Handles libvirt vms using kcli
+module: kcli_cluster
+short_description: Handles K8s clusters using kcli
 description:
     - Longer description of the module
     - You might include instructions
@@ -19,24 +19,17 @@ requirements:
     - kcli python package you can grab from pypi'''
 
 EXAMPLES = '''
-- name: Create a vm from profile centos8stream
-  kvirt_vm:
-    name: prout
-    profile: centos8stream
+- name: Create a k8s cluster
+  kcli_cluster:
+    name: myclu
+    type: kubeadm
+    parameyters:
+     ctlplanes: 3
+     workers: 2
 
-- name: Create a vm from image centos8stream
-  kvirt_vm:
-    name: prout
-    image: centos8stream
-    parameters:
-     memory: 4096
-     numcpus: 4
-     cmds:
-     - echo Welcome here > /etc/motd
-
-- name: Delete that vm
-  kvirt_vm:
-    name: prout
+- name: Delete that cluster
+  kcli_cluster:
+    name: myclu
     state: absent
 '''
 
@@ -53,16 +46,17 @@ def main():
         },
         "name": {"required": True, "type": "str"},
         "client": {"required": False, "type": "str"},
-        "image": {"required": False, "type": "str"},
-        "profile": {"required": False, "type": "str"},
+        "type": {"required": True, "type": "str", "choices": ['k3s', 'generic', 'kubeadm', 'okd', 'openshift']},
         "parameters": {"required": False, "type": "dict"},
     }
     module = AnsibleModule(argument_spec=argument_spec)
     client = module.params['client']
+    overrides = module.params['parameters'] if module.params['parameters'] is not None else {}
+    cluster_type = module.params['type']
     config = Kconfig(client=client, quiet=True)
-    k = config.k
-    name = module.params['name']
-    exists = k.exists(name)
+    cluster = module.params['name']
+    clusters = config.list_kubes()
+    exists = True if cluster in clusters else False
     state = module.params['state']
     if state == 'present':
         if exists:
@@ -70,21 +64,17 @@ def main():
             skipped = True
             meta = {'result': 'skipped'}
         else:
-            image = module.params['image']
-            profile = module.params['profile']
-            if image is not None:
-                profile = image
-            elif profile is None:
-                # module.fail_json(msg='profile or image needs to be specified', changed=False)
-                profile = 'kvirt'
-                config.profiles[profile] = {}
-            overrides = module.params['parameters'] if module.params['parameters'] is not None else {}
-            meta = config.create_vm(name, profile, overrides=overrides)
+            if cluster_type in ['okd', 'openshift']:
+                meta = config.create_kube_openshift(cluster, overrides=overrides)
+            elif cluster_type == 'k3s':
+                meta = config.create_kube_k3s(cluster, overrides=overrides)
+            else:
+                meta = config.create_kube_generic(cluster, overrides=overrides)
             changed = True
             skipped = False
     else:
         if exists:
-            meta = k.delete(name)
+            meta = config.delete_kube(cluster, overrides=overrides)
             changed = True
             skipped = False
         else:

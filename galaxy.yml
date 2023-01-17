@@ -1,0 +1,23 @@
+namespace: karmab
+name: kcli
+version: 1.0.0
+
+readme: README.md
+
+authors:
+- https://github.com/karmab
+
+description: Provides access to kcli - the ultimate virtualisation wrapper
+
+license:
+- Apache-2.0
+
+tags: [ kcli, modules]
+
+dependencies: {}
+
+repository: https://github.com/karmab/ansible-kcli-modules
+documentation: https://github.com/karmab/ansible-kcli-modules#readme
+issues: https://github.com/karmab/kcli
+
+build_ignore: []
