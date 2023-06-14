@@ -3,7 +3,7 @@
 #  - import_role:
 #        name: karmab.kcli-modules
   - name: Create a k8s cluster
-    kvirt_cluster:
+    kcli_cluster:
       state: absent
       name: myclu
       type: kubeadm

@@ -3,14 +3,14 @@
     - import_role:
         name: karmab.kcli-modules
     - name: Create vm jhendrix from template CentOS-7-x86_64-GenericCloud.qcow2 and forcing memory to be 2G
-      kvirt_vm: 
+      kcli_vm: 
         name: jhendrix
         state: present
         profile: CentOS-7-x86_64-GenericCloud.qcow2
         parameters:
          memory: 2048
     - name: Get ip from vm jhendrix
-      kvirt_info:
+      kcli_info:
         name: jhendrix
       register: result
       until: result.meta.ip is defined
