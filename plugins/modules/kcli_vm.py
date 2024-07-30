@@ -75,23 +75,22 @@ def main():
             if image is not None:
                 profile = image
             elif profile is None:
-                # module.fail_json(msg='profile or image needs to be specified', changed=False)
                 profile = 'kvirt'
                 config.profiles[profile] = {}
             overrides = module.params['parameters'] if module.params['parameters'] is not None else {}
             meta = config.create_vm(name, profile, overrides=overrides)
-            changed = True
-            skipped = False
+            changed. skipped = True, False
     else:
         if exists:
             meta = k.delete(name)
-            changed = True
-            skipped = False
+            changed, skipped = True, False
         else:
-            changed = False
-            skipped = True
+            changed, skipped = False, True
             meta = {'result': 'skipped'}
-    module.exit_json(changed=changed, skipped=skipped, meta=meta)
+    if 'result' in meta and meta['result'] == 'failure':
+        module.fail_json(msg=meta['result'], **meta)
+    else:
+        module.exit_json(changed=changed, skipped=skipped, meta=meta)
 
 
 if __name__ == '__main__':

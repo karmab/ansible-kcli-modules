@@ -16,13 +16,13 @@ author: "Karim Boumedhel, @karmab"
 notes:
     - Details at https://github.com/karmab/kcli
 requirements:
-    - kcli python package you can grab from pypi'''
+    - kcli python package'''
 
 EXAMPLES = '''
 - name: Create a k8s cluster
   kcli_cluster:
     name: myclu
-    type: kubeadm
+    type: generic
     parameyters:
      ctlplanes: 3
      workers: 2
@@ -32,6 +32,8 @@ EXAMPLES = '''
     name: myclu
     state: absent
 '''
+
+valid_cluster_types = ['aks', 'eks', 'generic', 'gke', 'kubeadm', 'k3s', 'microshift', 'openshift', 'rke2']
 
 
 def main():
@@ -46,7 +48,7 @@ def main():
         },
         "name": {"required": True, "type": "str"},
         "client": {"required": False, "type": "str"},
-        "type": {"required": True, "type": "str", "choices": ['k3s', 'generic', 'kubeadm', 'okd', 'openshift']},
+        "type": {"required": True, "type": "str", "choices": valid_cluster_types},
         "parameters": {"required": False, "type": "dict"},
     }
     module = AnsibleModule(argument_spec=argument_spec)
@@ -56,32 +58,26 @@ def main():
     config = Kconfig(client=client, quiet=True)
     cluster = module.params['name']
     clusters = config.list_kubes()
-    exists = True if cluster in clusters else False
+    exists = cluster in clusters
     state = module.params['state']
     if state == 'present':
         if exists:
-            changed = False
-            skipped = True
             meta = {'result': 'skipped'}
+            changed, skipped = False, True
         else:
-            if cluster_type in ['okd', 'openshift']:
-                meta = config.create_kube_openshift(cluster, overrides=overrides)
-            elif cluster_type == 'k3s':
-                meta = config.create_kube_k3s(cluster, overrides=overrides)
-            else:
-                meta = config.create_kube_generic(cluster, overrides=overrides)
-            changed = True
-            skipped = False
+            meta = config.create_kube(cluster, cluster_type, overrides=overrides)
+            changed, skipped = True, False
     else:
         if exists:
             meta = config.delete_kube(cluster, overrides=overrides)
-            changed = True
-            skipped = False
+            changed, skipped = True, False
         else:
-            changed = False
-            skipped = True
             meta = {'result': 'skipped'}
-    module.exit_json(changed=changed, skipped=skipped, meta=meta)
+            changed, skipped = False, True
+    if 'result' in meta and meta['result'] == 'failure':
+        module.fail_json(msg=meta['result'], **meta)
+    else:
+        module.exit_json(changed=changed, skipped=skipped, meta=meta)
 
 
 if __name__ == '__main__':

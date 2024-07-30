@@ -42,10 +42,10 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 
 ```yaml
   - name: Create vm tahitibob from centos8stream image and forcing memory to be 2G
-    karmab.kcli_vm:
+    karmab.kcli.kcli_vm:
       name: tahitibob
       state: present
-      #profile: centos8stream
+      image: centos8stream
       parameters:
        memory: 2048
     register: result
@@ -64,7 +64,7 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 
 ```yaml
 - name: Get ip from vm tahitibob
-  karmab.kcli_info:
+  karmab.kcli.kcli_info:
     name: tahitibob
   register: result
 - debug: var=result.meta.ip
@@ -81,7 +81,7 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 
 ```yaml
 - name: Launch plan wilibonka from plan file myplan.yml
-  karmab.kcli_plan:
+  karmab.kcli.kcli_plan:
     name: wilibonka
     inputfile: myplan.yml
   register: result
@@ -95,28 +95,11 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 |inputfile   |false    |                      |
 |parameters  |false    |Empty dict            |
 
-#### kcli_product
-
-```yaml
-- name: Deploy product origin, provided there is a kcli repo providing it
-  karmab.kcli_product:
-    name: microshift
-    product: microshift
-```
-
-|Parameter   |Required |Default Value         |
-|------------|---------|----------------------|
-|name        |true     |                      |
-|client      |false    |                      |
-|product     |true     |                      |
-|repo        |false    |                      |
-|parameters  |false    |Empty dict            |
-
 #### kcli_cluster
 
 ```yaml
 - name: Create a k8s cluster
-  karmab.kcli_cluster:
+  karmab.kcli.kcli_cluster:
     state: absent
     name: myclu
     type: kubeadm
@@ -133,6 +116,24 @@ For all of them, apart from mandatory parameters, you can provide a parameters d
 |client      |false    |                      |
 |type        |false    |generic               |
 |parameters  |false    |Empty dict            |
+
+#### kcli_product
+
+```yaml
+- name: Deploy product origin, provided there is a kcli repo providing it
+  karmab.kcli.kcli_product:
+    name: microshift
+    product: microshift
+```
+
+|Parameter   |Required |Default Value         |
+|------------|---------|----------------------|
+|name        |true     |                      |
+|client      |false    |                      |
+|product     |true     |                      |
+|repo        |false    |                      |
+|parameters  |false    |Empty dict            |
+
 
 ## License
 

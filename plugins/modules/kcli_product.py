@@ -71,7 +71,10 @@ def main():
         meta = config.plan(name, delete=True)
         changed = True if 'deletedvms' in meta else False
         skipped = False
-    module.exit_json(changed=changed, skipped=skipped, meta=meta)
+    if 'result' in meta and meta['result'] == 'failure':
+        module.fail_json(msg=meta['result'], **meta)
+    else:
+        module.exit_json(changed=changed, skipped=skipped, meta=meta)
 
 
 if __name__ == '__main__':

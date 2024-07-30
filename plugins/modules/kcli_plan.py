@@ -54,9 +54,7 @@ def main():
     inputfile = module.params['inputfile']
     state = module.params['state']
     if state == 'present':
-        # if inputfile is None:
-        #    module.fail_json(msg='Missing inputfile parameter')
-        overrides = module.params['parameters'] if module.params['parameters'] is not None else {}
+        overrides = module.params['parameters'] or {}
         meta = config.plan(name, inputfile=inputfile, overrides=overrides)
         changed = True if 'newvms' in meta else False
         skipped = False
@@ -64,7 +62,10 @@ def main():
         meta = config.plan(name, delete=True)
         changed = True if 'deletedvms' in meta else False
         skipped = False
-    module.exit_json(changed=changed, skipped=skipped, meta=meta)
+    if 'result' in meta and meta['result'] == 'failure':
+        module.fail_json(msg=meta['result'], **meta)
+    else:
+        module.exit_json(changed=changed, skipped=skipped, meta=meta)
 
 
 if __name__ == '__main__':
