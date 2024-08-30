@@ -79,7 +79,7 @@ def main():
                 config.profiles[profile] = {}
             overrides = module.params['parameters'] if module.params['parameters'] is not None else {}
             meta = config.create_vm(name, profile, overrides=overrides)
-            changed. skipped = True, False
+            changed, skipped = True, False
     else:
         if exists:
             meta = k.delete(name)
